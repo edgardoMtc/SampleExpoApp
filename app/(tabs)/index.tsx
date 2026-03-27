@@ -1,14 +1,39 @@
+import { GamBanner, useAds } from '@mediatradecraftllc/cmdnative-lib';
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Link } from 'expo-router';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+
+function BannerAd() {
+  const { nimbusReady } = useAds();
+
+  if (!nimbusReady) return null;
+
+  return (
+    <View style={{ alignItems: 'center' }}>
+      {/* <NimbusBanner
+        nimbusUnitId="your_nimbus_ad_unit"
+        position="FOOTER"
+        // refreshInterval={60}
+        onLoaded={() => console.log('Ad loaded')}
+        onError={(msg) => console.warn('Ad error:', msg)}
+      /> */}
+      <GamBanner
+        unitId="/21854935662/Testing/mobile_app"
+        customTargeting={{ plan: 'free' }}
+        keywords={['news']}
+      />
+    </View>
+  );
+}
 
 export default function HomeScreen() {
   return (
+    <View style={{ flex: 1 }}>
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
@@ -75,6 +100,8 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
+      <BannerAd />
+    </View>
   );
 }
 

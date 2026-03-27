@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ejprdev14.SampleExpoApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +20,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ],
+      "package": "com.ejprdev14.SampleExpoApp"
     },
     "web": {
       "output": "static",
@@ -27,6 +32,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8637254547934685~6339941396",
+          "iosAppId": "ca-app-pub-8637254547934685~6339941396",
+          "user_tracking_usage_description": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -38,7 +51,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true,
