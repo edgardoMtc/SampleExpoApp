@@ -1,6 +1,7 @@
-import { GamBanner, useAds } from '@mediatradecraftllc/cmdnative-lib';
+import { GamBanner, NimbusBanner, /* setNimbusGlobals, */ useAds } from '@mediatradecraftllc/cmdnative-lib';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
+import { /* useEffect, */ useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
@@ -8,25 +9,51 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
-function BannerAd() {
-  const { nimbusReady } = useAds();
+// const AD_TARGETING = {
+//   customTargeting: { plan: 'pro', screen: 'home' },
+//   keywords: ['sports', 'news', 'gaming'],
+// };
 
-  if (!nimbusReady) return null;
+function BannerWithFallback() {
+  const { nimbusReady } = useAds();
+  const [nimbusFailed, setNimbusFailed] = useState(false);
+
+  // useEffect(() => {
+  //   if (!nimbusReady) return;
+  //   setNimbusGlobals({
+  //     keywords: AD_TARGETING.keywords.join(','),
+  //     customTargeting: AD_TARGETING.customTargeting,
+  //     userAge: 25,
+  //     userGender: 'M',
+  //   }).catch((e) => console.warn('Failed to set Nimbus globals:', e));
+  // }, [nimbusReady]);
 
   return (
-    <View style={{ alignItems: 'center' }}>
-      {/* <NimbusBanner
-        nimbusUnitId="your_nimbus_ad_unit"
-        position="FOOTER"
-        // refreshInterval={60}
-        onLoaded={() => console.log('Ad loaded')}
-        onError={(msg) => console.warn('Ad error:', msg)}
-      /> */}
-      <GamBanner
-        unitId="/21854935662/Testing/mobile_app"
-        customTargeting={{ plan: 'free' }}
-        keywords={['news']}
-      />
+    <View style={{ alignItems: 'center', marginBottom: 15 }}>
+      {nimbusReady && !nimbusFailed && (
+        <NimbusBanner
+          nimbusUnitId="your_nimbus_ad_unit"
+          position="FOOTER"
+          refreshInterval={0}
+          onLoaded={() => console.log('Nimbus ad loaded')}
+          onError={(msg) => {
+            console.log('Nimbus failed, falling back to GAM:', msg);
+            setNimbusFailed(true);
+          }}
+          onNoFill={() => {
+            console.log('Nimbus no fill, falling back to GAM');
+            setNimbusFailed(true);
+          }}
+        />
+      )}
+
+      {(!nimbusReady || nimbusFailed) && (
+        <GamBanner
+          unitId="/21854935662/your_gam_ad_unit"
+          // customTargeting={AD_TARGETING.customTargeting}
+          // keywords={AD_TARGETING.keywords}
+        />
+      )}
     </View>
   );
 }
@@ -100,7 +127,7 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
-      <BannerAd />
+      <BannerWithFallback />
     </View>
   );
 }
