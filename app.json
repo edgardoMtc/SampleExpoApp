@@ -55,7 +55,7 @@
           }
         }
       ],
-      "expo-tracking-transparency"
+      // "expo-tracking-transparency"
     ],
     "experiments": {
       "typedRoutes": true,

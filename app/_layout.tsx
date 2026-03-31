@@ -15,7 +15,9 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <AdsProvider nimbusConfig={NIMBUS_CONFIG}>
+    <AdsProvider 
+    disableATT={true}
+    nimbusConfig={NIMBUS_CONFIG}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
